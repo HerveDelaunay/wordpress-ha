@@ -46,7 +46,7 @@ resource "aws_instance" "datascientest_bastion_a" {
   instance_type          = "t2.micro"
   subnet_id              = var.public_subnet_id_a
   vpc_security_group_ids = [aws_security_group.sg_22.id]
-  key_name               = aws_key_pair.datascientest_aws
+  key_name               = aws_key_pair.datascientest_aws.key_name
 
   tags = {
     Name        = "hde-bastion-a"
@@ -59,7 +59,7 @@ resource "aws_instance" "datascientest_bastion_b" {
   instance_type          = "t2.micro"
   subnet_id              = var.public_subnet_id_b
   vpc_security_group_ids = [aws_security_group.sg_22.id]
-  key_name               = aws_key_pair.datascientest_aws
+  key_name               = aws_key_pair.datascientest_aws.key_name
 
   tags = {
     Name        = "hde-bastion-b"

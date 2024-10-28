@@ -24,4 +24,6 @@ module "wordpress" {
   source = "./modules/wordpress"
   depends_on = [ module.vpc ]
   vpc_id = module.vpc.vpc_id
+  private_subnet_id_a = module.vpc.private_subnet_id_a
+  private_subnet_id_b = module.vpc.private_subnet_id_b
 }
