@@ -6,7 +6,7 @@ resource "aws_key_pair" "datascientest_aws" {
 resource "aws_security_group" "sg_22" {
 
   name   = "sg_22"
-  vpc_id = var.vpc.id
+  vpc_id = var.vpc_id
 
   // authorize incoming traffic only on port 22 from all ip addresses
   ingress {
@@ -44,9 +44,9 @@ data "aws_ami" "bastion-ami" {
 resource "aws_instance" "datascientest_bastion_a" {
   ami                    = data.aws_ami.bastion-ami.id
   instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.public_subnet_id_a
+  subnet_id              = var.public_subnet_id_a
   vpc_security_group_ids = [aws_security_group.sg_22.id]
-  key_name               = aws_key_pair.datascientest_aws.datascientest_aws
+  key_name               = aws_key_pair.datascientest_aws
 
   tags = {
     Name        = "hde-bastion-a"
@@ -57,9 +57,9 @@ resource "aws_instance" "datascientest_bastion_a" {
 resource "aws_instance" "datascientest_bastion_b" {
   ami                    = data.aws_ami.bastion-ami.id
   instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.public_subnet_id_b
+  subnet_id              = var.public_subnet_id_b
   vpc_security_group_ids = [aws_security_group.sg_22.id]
-  key_name               = aws_key_pair.datascientest_aws.datascientest_aws
+  key_name               = aws_key_pair.datascientest_aws
 
   tags = {
     Name        = "hde-bastion-b"

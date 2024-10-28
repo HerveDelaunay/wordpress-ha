@@ -82,7 +82,7 @@ resource "aws_route_table" "rtb_public" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "public-routetable"
+    Name = "hde_public_routetable"
   }
 
   depends_on = [aws_vpc.main]
@@ -99,7 +99,7 @@ resource "aws_route" "route_igw" {
 
 # Link public subnet a to public routing table
 resource "aws_route_table_association" "rtb_association_a" {
-  subnet_id = aws_subnet.public_subnet_a.id
+  subnet_id = aws_subnet.public_a.id
   route_table_id = aws_route_table.rtb_public.id
 
   depends_on = [aws_route_table.rtb_public]
@@ -107,36 +107,8 @@ resource "aws_route_table_association" "rtb_association_a" {
 
 # Link public subnet b to public routing table
 resource "aws_route_table_association" "rtb_association_b" {
-  subnet_id      = aws_subnet.public_subnet_b.id
+  subnet_id      = aws_subnet.public_b.id
   route_table_id = aws_route_table.rtb_public.id
 
   depends_on = [aws_route_table.rtb_public]
-}
-
-# NAT
-resource "aws_eip" "eip_public_a" {
-  vpc = true
-}
-resource "aws_nat_gateway" "gw_public_a" {
-  # allocate an elastic ip
-  allocation_id = aws_eip.eip_public_a.id
-  # attach to the public subnet a
-  subnet_id     = aws_subnet.public_subnet_a.id
-
-  tags = {
-    Name = "hde-nat-public-a"
-  }
-}
-
-resource "aws_eip" "eip_public_b" {
-  vpc = true
-}
-resource "aws_nat_gateway" "gw_public_b" {
-  allocation_id = aws_eip.eip_public_b.id
-  # attach to the public subnet b
-  subnet_id     = aws_subnet.public_subnet_b.id
-
-  tags = {
-    Name = "hde-nat-public-b"
-  }
 }
