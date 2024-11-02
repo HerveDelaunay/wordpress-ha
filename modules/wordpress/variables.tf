@@ -1,14 +1,33 @@
 variable "vpc_id" {
-  type = string
+  type        = string
   description = "id of the vpc"
 }
-
-variable "private_subnet_id_a" {
+variable "db_name" {
   type = string
-  description = "id of the private subnet a"
+}
+variable "db_username" {
+  type = string
+}
+variable "db_password" {
+  type = string
 }
 
-variable "private_subnet_id_b" {
+variable "db_hostname" {
   type = string
-  description = "id of the private subnet b"
+}
+
+variable "private_subnets" {
+  type = list(string)
+}
+
+variable "allow_private_ssh_id" {
+  type = string
+}
+
+variable "allow_public_http_id" {
+  type = string
+}
+
+variable "allow_all_outbound_id" {
+  type = string
 }

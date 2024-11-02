@@ -1,114 +1,22 @@
-# Create a VPC
-resource "aws_vpc" "main" {
-  cidr_block = var.cidr_vpc
-  enable_dns_support   = true
+data "aws_availability_zones" "available" {}
+
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name                 = "main_vpc"
+  cidr                 = var.cidr_block
   enable_dns_hostnames = true
-}
+  azs                  = slice(data.aws_availability_zones.available.names, 0, 2)
 
-# Create the subnets
-# Public auto allocates public ipv4 address
-resource "aws_subnet" "public_a" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.cidr_public_subnet_a
-  map_public_ip_on_launch = "true"
-  availability_zone = var.az_a
+  public_subnets  = var.public_subnet_cidr_range
+  private_subnets = var.private_subnet_cidr_range
+
+  enable_nat_gateway     = true
+  single_nat_gateway     = false
+  one_nat_gateway_per_az = true
 
   tags = {
-    Name = "public-a"
-    Environment = var.environment
     Owner = "hde"
   }
 
-  depends_on = [ aws_vpc.main ]
-}
-
-resource "aws_subnet" "public_b" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.cidr_public_subnet_b
-  map_public_ip_on_launch = "true"
-  availability_zone = var.az_b
-
-  tags = {
-    Name = "public-b"
-    Environment = var.environment
-    Owner = "hde"
-  }
-
-  depends_on = [ aws_vpc.main ]
-}
-
-resource "aws_subnet" "private_a" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.cidr_private_subnet_a
-  availability_zone = var.az_a
-
-  tags = {
-    Name = "private-a"
-    Environment = var.environment
-    Owner = "hde"
-  }
-
-  depends_on = [ aws_vpc.main ]
-}
-
-resource "aws_subnet" "private_b" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.cidr_private_subnet_b
-  availability_zone = var.az_b
-
-  tags = {
-    Name = "private-b"
-    Environment = var.environment
-    Owner = "hde"
-  }
-
-  depends_on = [ aws_vpc.main ]
-}
-
-#IGW for the VPC
-resource "aws_internet_gateway" "igateway" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "igateway"
-    Owner = "hde"
-  }
-
-  depends_on = [aws_vpc.main]
-}
-
-# Routing table
-resource "aws_route_table" "rtb_public" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "hde_public_routetable"
-  }
-
-  depends_on = [aws_vpc.main]
-}
-
-# Route to the IGW
-resource "aws_route" "route_igw" {
-  route_table_id         = aws_route_table.rtb_public.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.igateway.id
-
-  depends_on = [aws_internet_gateway.igateway]
-}
-
-# Link public subnet a to public routing table
-resource "aws_route_table_association" "rtb_association_a" {
-  subnet_id = aws_subnet.public_a.id
-  route_table_id = aws_route_table.rtb_public.id
-
-  depends_on = [aws_route_table.rtb_public]
-}
-
-# Link public subnet b to public routing table
-resource "aws_route_table_association" "rtb_association_b" {
-  subnet_id      = aws_subnet.public_b.id
-  route_table_id = aws_route_table.rtb_public.id
-
-  depends_on = [aws_route_table.rtb_public]
 }
