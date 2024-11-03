@@ -2,6 +2,14 @@ variable "vpc_id" {
   type        = string
   description = "id of the vpc"
 }
+
+variable "vpc_cidr_block" {
+  type = string
+}
+
+variable "vpc_public_subnets" {
+  type = list(string)
+}
 variable "db_name" {
   type = string
 }

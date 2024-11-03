@@ -1,13 +1,11 @@
-variable "vpc_id" {
+variable "allow_public_ssh_sg_id" {
   type = string
 }
 
-variable "public_subnet_id_a" {
+variable "allow_all_outbound_sg_id" {
   type = string
-  description = "id of the public subnet a"
 }
 
-variable "public_subnet_id_b" {
-  type = string
-  description = "id of the public subnet b"
+variable "vpc_public_subnets" {
+  type = list(string)
 }

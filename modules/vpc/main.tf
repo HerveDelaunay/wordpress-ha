@@ -4,7 +4,7 @@ module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
   name                 = "main_vpc"
-  cidr                 = var.cidr_block
+  cidr                 = var.vpc_cidr_block
   enable_dns_hostnames = true
   azs                  = slice(data.aws_availability_zones.available.names, 0, 2)
 

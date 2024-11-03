@@ -27,3 +27,7 @@ variable "private_subnets_ids" {
   type     = list(string)
   nullable = false
 }
+
+variable "allow_private_rds_sg_id" {
+  type = string
+}

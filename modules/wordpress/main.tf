@@ -1,5 +1,5 @@
 locals {
-  user_data = templatefile("${path.module}/install.sh",
+  user_data = templatefile("${path.module}/install_wordpress.sh",
     {
       db_name     = var.db_name,
       db_username = var.db_username,
@@ -68,7 +68,7 @@ module "datascientest-auto-scaling" {
   ]
 
   tags = {
-    Name = "hde_wordpress_autoscaling_group"
+    Owner = "hde"
   }
 
   scaling_policies = {
@@ -88,10 +88,10 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 9.7.0"
 
-  name = "datascientest-wordpress-lb"
+  name = "wordpress-lb"
 
   vpc_id  = var.vpc_id
-  subnets = var.public_subnets
+  subnets = var.vpc_public_subnets
 
   enable_deletion_protection = false
 

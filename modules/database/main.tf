@@ -27,7 +27,7 @@ module "allow_private_rds_sg" {
   ]
 
   tags = {
-    Name = "hde_allow_private_rds_sg"
+    Owner = "hde"
   }
 
 }
@@ -57,7 +57,7 @@ module "master" {
   multi_az               = true
   create_db_subnet_group = true
   subnet_ids             = var.private_subnets_ids
-  vpc_security_group_ids = [module.allow_private_rds_sg.id]
+  vpc_security_group_ids = [var.allow_private_rds_sg_id]
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
@@ -68,7 +68,7 @@ module "master" {
   deletion_protection     = false
 
   tags = {
-    Name = "hde-masterdb"
+    Owner = "hde"
   }
 
 }
@@ -96,7 +96,7 @@ module "replica" {
   manage_master_user_password = false
 
   multi_az               = false
-  vpc_security_group_ids = [module.allow_private_rds_sg.id]
+  vpc_security_group_ids = [var.allow_private_rds_sg_id]
 
   maintenance_window = "Tue:00:00-Tue:03:00"
   backup_window      = "03:00-06:00"
@@ -106,7 +106,7 @@ module "replica" {
   deletion_protection     = false
 
   tags = {
-    Name = "hde-replicadb"
+    Owner = "hde"
   }
 
 }
