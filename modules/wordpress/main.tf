@@ -1,5 +1,6 @@
 locals {
-  user_data = templatefile("${path.module}/install_wordpress.sh",
+  # user_data = templatefile("${path.module}/install_wordpress.sh",
+  user_data = templatefile("${path.module}/install.sh",
     {
       db_name     = var.db_name,
       db_username = var.db_username,
@@ -7,10 +8,6 @@ locals {
       db_hostname = var.db_hostname
   })
   instance_type = "t2.micro"
-}
-resource "aws_key_pair" "datascientest_aws" {
-  key_name   = "datascientest_aws"
-  public_key = file("~/.ssh/datascientest_aws.pub")
 }
 data "aws_ami" "wordpress-ami" {
   most_recent = true
@@ -50,7 +47,7 @@ module "datascientest-auto-scaling" {
   image_id      = data.aws_ami.wordpress-ami.id
   instance_type = local.instance_type
   user_data     = base64encode(local.user_data)
-  key_name      = aws_key_pair.datascientest_aws.key_name
+  key_name      = "hde-wp-kp"
 
   security_groups = [var.allow_private_ssh_id, var.allow_public_http_id, var.allow_all_outbound_id]
 

@@ -46,6 +46,7 @@ module "master" {
 
   allocated_storage     = local.allocated_storage
   max_allocated_storage = local.max_allocated_storage
+  storage_encrypted     = false
 
   db_name  = var.db_name
   username = var.db_username
@@ -89,6 +90,7 @@ module "replica" {
 
   allocated_storage     = local.allocated_storage
   max_allocated_storage = local.max_allocated_storage
+  storage_encrypted     = false
 
   port = local.port
 

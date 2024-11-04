@@ -10,14 +10,14 @@ module "allow_private_rds_sg" {
       to_port     = 3306
       protocol    = "tcp"
       description = "ingress from private subnet a on port 3306"
-      cidr_blocks = "10.1.2.0/24"
+      cidr_blocks = "10.0.1.0/24"
     },
     {
       from_port   = 3306
       to_port     = 3306
       protocol    = "tcp"
       description = "ingress from private subnet b on port 3306"
-      cidr_blocks = "10.1.3.0/24"
+      cidr_blocks = "10.0.2.0/24"
     }
   ]
 
@@ -61,7 +61,7 @@ module "allow_private_ssh_sg" {
       to_port     = 22
       protocol    = "tcp"
       description = "ingress from vpc on port 22"
-      cidr_blocks = "10.1.0.0/16"
+      cidr_blocks = "10.0.0.0/16"
     }
   ]
 

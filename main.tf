@@ -4,7 +4,7 @@ module "vpc" {
 
 module "bastion" {
   source                   = "./modules/bastion"
-  depends_on               = [module.vpc]
+  depends_on               = [module.wordpress]
   vpc_public_subnets       = module.vpc.vpc_public_subnets_ids
   allow_public_ssh_sg_id   = module.security.allow_public_ssh_id
   allow_all_outbound_sg_id = module.security.allow_all_outbound_id
@@ -27,7 +27,7 @@ module "wordpress" {
 }
 module "db" {
   source                  = "./modules/database"
-  depends_on              = [module.vpc, module.security]
+  depends_on              = [module.security]
   private_subnets_ids     = module.vpc.private_subnets_ids
   vpc_id                  = module.vpc.vpc_id
   allow_private_rds_sg_id = module.security.allow_private_rds_id
